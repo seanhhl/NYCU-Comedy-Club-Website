@@ -1,0 +1,37 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const title = '活動歷程';
+
+const allTimeline = await getCollection('timeline');
+allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Layout title={title}>
+  <h1>{title}</h1>
+  <p>查看我們過去的活動和即將到來的活動。</p>
+  
+  <section style="margin-top: 2rem;">
+    <h2>活動時程</h2>
+    {allTimeline.length === 0 ? (
+      <p><em>(目前沒有活動紀錄)</em></p>
+    ) : (
+      <ul>
+        {allTimeline.map(event => (
+          <li style="margin-bottom: 2rem;">
+            <h3>{event.data.title} <small style="font-weight: normal; font-size: 0.9em; color: #666;">- {event.data.date.toLocaleDateString()}</small></h3>
+            <p>{event.data.description}</p>
+            {event.data.photos && event.data.photos.length > 0 && (
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                {event.data.photos.map(photo => (
+                  <img src={photo} alt={event.data.title} style="max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 4px;" />
+                ))}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</Layout>
+

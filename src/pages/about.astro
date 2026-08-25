@@ -1,0 +1,59 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+const title = '關於我們';
+
+const allFaq = await getCollection('faq') || [];
+allFaq.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+
+const allTeam = await getCollection('team') || [];
+allTeam.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+
+const renderedTeam = await Promise.all(allTeam.map(async (member) => {
+  const { Content } = await render(member);
+  return { ...member, Content };
+}));
+---
+<Layout title={title}>
+  <h1>{title}</h1>
+  
+  <section style="margin-top: 2rem;">
+    <h2>常見問題 (FAQ)</h2>
+    {allFaq.length === 0 ? (
+      <p><em>(目前沒有常見問題)</em></p>
+    ) : (
+      <dl>
+        {allFaq.map(faq => (
+          <div style="margin-bottom: 1rem;">
+            <dt style="font-weight: bold; margin-bottom: 0.5rem;">Q: {faq.data.question}</dt>
+            <dd style="margin-left: 0;">A: {faq.data.answer}</dd>
+          </div>
+        ))}
+      </dl>
+    )}
+  </section>
+
+  <section style="margin-top: 2rem;">
+    <h2>幹部介紹</h2>
+    {renderedTeam.length === 0 ? (
+      <p><em>(目前沒有幹部介紹)</em></p>
+    ) : (
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem; margin-top: 1rem;">
+        {renderedTeam.map(member => (
+          <div style="border: 1px solid #eee; padding: 1rem; border-radius: 8px; text-align: center;">
+            {member.data.photo && (
+              <img src={member.data.photo} alt={member.data.title} style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem;" />
+            )}
+            <h3 style="margin: 0;">{member.data.title}</h3>
+            <p style="color: #666; margin: 0.5rem 0;">{member.data.role}</p>
+            <div style="font-size: 0.9em; text-align: left;">
+              <member.Content />
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+</Layout>
+

@@ -1,0 +1,48 @@
+backend:
+  name: github
+  repo: seanhhl/NYCU-Comedy-Club-Website
+  branch: main
+local_backend: true
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "announcements"
+    label: "Announcements"
+    folder: "src/content/announcements"
+    create: true
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "datetime"}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "timeline"
+    label: "Timeline Events"
+    folder: "src/content/timeline"
+    create: true
+    fields:
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Date", name: "date", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "markdown"}
+      - {label: "Photos", name: "photos", widget: "list", field: {label: "Photo", name: "photo", widget: "image"}, required: false}
+
+  - name: "faq"
+    label: "FAQ Entries"
+    folder: "src/content/faq"
+    create: true
+    fields:
+      - {label: "Question", name: "question", widget: "string"}
+      - {label: "Answer", name: "answer", widget: "markdown"}
+      - {label: "Order", name: "order", widget: "number", required: false}
+
+  - name: "team"
+    label: "Team Members"
+    folder: "src/content/team"
+    create: true
+    fields:
+      - {label: "Name", name: "title", widget: "string"}
+      - {label: "Role", name: "role", widget: "string"}
+      - {label: "Photo", name: "photo", widget: "image", required: false}
+      - {label: "Bio", name: "body", widget: "markdown"}
+      - {label: "Order", name: "order", widget: "number", required: false}
