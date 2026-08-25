@@ -1,10 +1,11 @@
 ---
+const base = import.meta.env.BASE_URL;
 ---
 <nav style="display: flex; justify-content: space-between; padding: 1rem; background: #f4f4f4;">
   <div>
     <strong>社團網站</strong>
-    <a href="/" style="margin-left: 1rem;">首頁</a>
-    <a href="/activities" style="margin-left: 1rem;">活動歷程</a>
-    <a href="/about" style="margin-left: 1rem;">關於我們</a>
+    <a href={base} style="margin-left: 1rem;">首頁</a>
+    <a href={`${base}/activities`} style="margin-left: 1rem;">活動歷程</a>
+    <a href={`${base}/about`} style="margin-left: 1rem;">關於我們</a>
   </div>
 </nav>

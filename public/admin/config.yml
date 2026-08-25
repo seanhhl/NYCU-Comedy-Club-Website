@@ -5,7 +5,7 @@ backend:
 local_backend: true
 
 media_folder: "public/images/uploads"
-public_folder: "/images/uploads"
+public_folder: "/NYCU-Comedy-Club-Website/images/uploads"
 
 collections:
   - name: "announcements"

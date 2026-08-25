@@ -24,7 +24,7 @@ allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
             {event.data.photos && event.data.photos.length > 0 && (
               <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
                 {event.data.photos.map(photo => (
-                  <img src={photo} alt={event.data.title} style="max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 4px;" />
+                  <img src={photo.startsWith(import.meta.env.BASE_URL) ? photo : `${import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL}/${photo.startsWith('/') ? photo.slice(1) : photo}`} alt={event.data.title} style="max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 4px;" />
                 ))}
               </div>
             )}

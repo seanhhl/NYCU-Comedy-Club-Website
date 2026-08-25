@@ -43,7 +43,7 @@ const renderedTeam = await Promise.all(allTeam.map(async (member) => {
         {renderedTeam.map(member => (
           <div style="border: 1px solid #eee; padding: 1rem; border-radius: 8px; text-align: center;">
             {member.data.photo && (
-              <img src={member.data.photo} alt={member.data.title} style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem;" />
+              <img src={member.data.photo.startsWith(import.meta.env.BASE_URL) ? member.data.photo : `${import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL}/${member.data.photo.startsWith('/') ? member.data.photo.slice(1) : member.data.photo}`} alt={member.data.title} style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem;" />
             )}
             <h3 style="margin: 0;">{member.data.title}</h3>
             <p style="color: #666; margin: 0.5rem 0;">{member.data.role}</p>
