@@ -2,7 +2,7 @@ backend:
   name: github
   repo: seanhhl/NYCU-Comedy-Club-Website
   branch: main
-local_backend: true
+  base_url: https://nycu-comedy-auth.sean-hanhsiang.workers.dev
 
 media_folder: "public/images/uploads"
 public_folder: "/NYCU-Comedy-Club-Website/images/uploads"

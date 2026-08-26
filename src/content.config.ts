@@ -14,8 +14,8 @@ const timeline = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.date(),
-    description: z.string().optional(),
-    photos: z.array(z.string()).optional(),
+    description: z.string().nullish(),
+    photos: z.array(z.string()).nullish(),
   }),
 });
 
@@ -24,7 +24,7 @@ const faq = defineCollection({
   schema: z.object({
     question: z.string(),
     answer: z.string(),
-    order: z.number().optional(),
+    order: z.number().nullish(),
   }),
 });
 
@@ -33,8 +33,8 @@ const team = defineCollection({
   schema: z.object({
     title: z.string(),
     role: z.string(),
-    photo: z.string().optional(),
-    order: z.number().optional(),
+    photo: z.string().nullish(),
+    order: z.number().nullish(),
   }),
 });
 
