@@ -8,33 +8,37 @@ const allTimeline = await getCollection('timeline');
 allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 <Layout title={title}>
-  <div class="header-section">
+  <header class="page-header">
     <h1>{title}</h1>
-    <p>查看我們過去的活動與單口喜劇演出紀錄。</p>
-  </div>
+    <p class="subtitle">追蹤我們的足跡，見證每一個笑聲的誕生。</p>
+  </header>
   
-  <section class="timeline-container">
+  <section class="timeline-section">
     {allTimeline.length === 0 ? (
-      <p><em>(目前沒有活動紀錄)</em></p>
+      <p class="empty-state">目前沒有活動紀錄</p>
     ) : (
       <div class="timeline">
         {allTimeline.map((event, index) => (
-          <div class="timeline-item" style={`animation-delay: ${index * 0.15}s`}>
+          <div class="timeline-item" style={`animation-delay: ${index * 0.1}s`}>
             <div class="timeline-dot"></div>
             <div class="timeline-content">
-              <div class="timeline-date">{event.data.date.toLocaleDateString()}</div>
+              <div class="timeline-date">{event.data.date.toLocaleDateString('zh-TW', { year: 'numeric', month: 'long', day: 'numeric' })}</div>
               <h3 class="timeline-title">{event.data.title}</h3>
-              <p class="timeline-description">{event.data.description}</p>
+              <p class="timeline-desc">{event.data.description}</p>
               
               {event.data.photos && event.data.photos.length > 0 && (
-                <div class="timeline-photos">
-                  {event.data.photos.map(photo => (
-                    <img 
-                      src={photo.startsWith(import.meta.env.BASE_URL) ? photo : `${import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL}/${photo.startsWith('/') ? photo.slice(1) : photo}`} 
-                      alt={event.data.title} 
-                      loading="lazy"
-                    />
-                  ))}
+                <div class="photo-gallery">
+                  {event.data.photos.map(photo => {
+                    // Ensure proper path resolution for images
+                    let imgSrc = photo;
+                    if (!photo.startsWith('http') && !photo.startsWith('data:')) {
+                       const base = import.meta.env.BASE_URL;
+                       const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
+                       const cleanPhoto = photo.startsWith('/') ? photo.slice(1) : photo;
+                       imgSrc = `${cleanBase}/${cleanPhoto}`;
+                    }
+                    return <img src={imgSrc} alt={event.data.title} loading="lazy" />
+                  })}
                 </div>
               )}
             </div>
@@ -46,151 +50,133 @@ allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 </Layout>
 
 <style>
-  .header-section {
-    text-align: center;
-    margin-bottom: 3rem;
+  .page-header {
+    margin-bottom: 4rem;
   }
   
-  .header-section p {
-    color: #94A3B8; /* Slate 400 */
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .subtitle {
+    color: var(--text-muted);
     font-size: 1.1rem;
   }
 
-  .timeline-container {
-    padding: 1rem 0;
+  .empty-state {
+    color: var(--text-muted);
+    font-style: italic;
   }
 
+  /* Vertical Timeline */
   .timeline {
     position: relative;
-    max-width: 800px;
-    margin: 0 auto;
-    padding-left: 2rem;
+    padding-left: 2.5rem;
   }
 
   /* The vertical line */
   .timeline::before {
     content: '';
     position: absolute;
+    left: 0;
     top: 0;
     bottom: 0;
-    left: 7px; /* Align with dot center */
     width: 2px;
-    background: linear-gradient(to bottom, var(--accent-blue), var(--accent-orange));
+    background: linear-gradient(to bottom, var(--accent-blue), transparent);
     opacity: 0.5;
   }
 
   .timeline-item {
     position: relative;
     margin-bottom: 3rem;
+    /* Item reveal animation */
     opacity: 0;
-    animation: fadeRight 0.6s ease-out forwards;
+    animation: slideInRight 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
 
-  /* The dot on the line */
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  /* The glowing dot */
   .timeline-dot {
     position: absolute;
-    left: -2rem;
-    top: 0.25rem;
-    width: 16px;
-    height: 16px;
+    left: calc(-2.5rem - 5px); /* perfectly centered on the line (2.5rem padding + 6px half width) */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
-    background-color: var(--bg-color);
-    border: 3px solid var(--accent-blue);
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
-    z-index: 2;
-    transition: all 0.3s ease;
-  }
-
-  .timeline-item:hover .timeline-dot {
     background-color: var(--accent-blue);
-    transform: scale(1.2);
-    box-shadow: 0 0 15px var(--accent-blue);
+    box-shadow: 0 0 15px 2px var(--glow-blue);
+    /* Removed the black border to let it glow */
   }
 
+  /* Surface Card */
   .timeline-content {
-    background: rgba(30, 41, 59, 0.5); /* Slate 800 translucent */
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%), var(--surface-card);
+    border: 1px solid rgba(255,255,255,0.05);
     border-radius: 12px;
-    padding: 1.5rem;
-    backdrop-filter: blur(10px);
+    padding: 1.5rem 2rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
 
-  .timeline-item:hover .timeline-content {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-    border-color: rgba(56, 189, 248, 0.4);
+  .timeline-content:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(125, 211, 252, 0.4);
+    border-color: rgba(125, 211, 252, 0.3);
   }
 
   .timeline-date {
     color: var(--accent-orange);
     font-size: 0.85rem;
     font-weight: 600;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
     margin-bottom: 0.5rem;
-    text-transform: uppercase;
   }
 
   .timeline-title {
-    margin: 0 0 0.5rem 0;
+    color: var(--text-main);
     font-size: 1.4rem;
-    color: var(--text-color);
+    margin-bottom: 1rem;
   }
 
-  .timeline-description {
-    color: #CBD5E1; /* Slate 300 */
+  .timeline-desc {
+    color: var(--text-muted);
     line-height: 1.6;
-    margin: 0;
+    margin-bottom: 1.5rem;
   }
 
-  .timeline-photos {
-    display: flex;
+  /* Gallery */
+  .photo-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 1rem;
-    flex-wrap: wrap;
-    margin-top: 1.25rem;
   }
 
-  .timeline-photos img {
-    max-width: 200px;
-    max-height: 150px;
+  .photo-gallery img {
+    width: 100%;
+    height: 120px;
     object-fit: cover;
     border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.1);
     transition: transform 0.3s ease;
   }
 
-  .timeline-photos img:hover {
-    transform: scale(1.05) rotate(1deg);
+  .photo-gallery img:hover {
+    transform: scale(1.05);
   }
 
-  @keyframes fadeRight {
-    from {
-      opacity: 0;
-      transform: translateX(-30px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  /* Responsive tweaks */
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     .timeline {
       padding-left: 1.5rem;
     }
-    .timeline::before {
-      left: 3px;
-    }
     .timeline-dot {
-      left: -1.5rem;
-      width: 12px;
-      height: 12px;
-      border-width: 2px;
+      left: calc(-1.5rem - 6px);
     }
-    .timeline-photos img {
-      max-width: 100%;
-      height: auto;
+    .timeline-content {
+      padding: 1.2rem;
     }
   }
 </style>

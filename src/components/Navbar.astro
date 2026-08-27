@@ -2,15 +2,16 @@
 const base = import.meta.env.BASE_URL;
 ---
 <nav class="navbar">
-  <div class="nav-container">
-    <a href={base} class="nav-brand">陽明交大貢丸喜劇社</a>
-    
+  <div class="nav-content">
+    <div class="brand">
+      <strong>NYCU Comedy</strong>
+    </div>
     <div class="nav-links">
       <a href={base}>首頁</a>
       <a href={`${base}/activities`}>活動歷程</a>
       <a href={`${base}/about`}>關於我們</a>
       <a href={`${base}/join`}>加入我們</a>
-      <a href={`${base}/admin`} class="admin-btn">幹部登入</a>
+      <a href={`${base}/admin`} class="admin-login">幹部登入</a>
     </div>
   </div>
 </nav>
@@ -19,16 +20,16 @@ const base = import.meta.env.BASE_URL;
   .navbar {
     position: sticky;
     top: 0;
+    width: 100%;
+    background: rgba(9, 9, 11, 0.4); /* Make it more transparent so blur is obvious */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(125, 211, 252, 0.1); /* Subtle blue border */
     z-index: 100;
-    background: var(--navbar-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   }
 
-  .nav-container {
-    max-width: 900px;
+  .nav-content {
+    max-width: 1200px;
     margin: 0 auto;
     padding: 1rem 2rem;
     display: flex;
@@ -36,19 +37,10 @@ const base = import.meta.env.BASE_URL;
     align-items: center;
   }
 
-  .nav-brand {
+  .brand strong {
     font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--text-color);
-    letter-spacing: 0.5px;
-    background: linear-gradient(to right, var(--accent-blue), var(--accent-orange));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    transition: transform 0.2s ease;
-  }
-
-  .nav-brand:hover {
-    transform: scale(1.05);
+    color: var(--text-main);
+    letter-spacing: 1px;
   }
 
   .nav-links {
@@ -58,45 +50,27 @@ const base = import.meta.env.BASE_URL;
   }
 
   .nav-links a {
-    color: var(--text-color);
+    color: var(--text-muted);
     font-weight: 500;
-    font-size: 0.95rem;
-    position: relative;
-    padding: 0.25rem 0;
+    text-decoration: none;
+    transition: color 0.2s ease;
   }
 
-  /* Animated underline effect */
-  .nav-links a:not(.admin-btn)::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: var(--accent-blue);
-    transition: width 0.3s ease;
+  .nav-links a:hover {
+    color: var(--text-main);
   }
 
-  .nav-links a:not(.admin-btn):hover::after {
-    width: 100%;
-  }
-  
-  .nav-links a:not(.admin-btn):hover {
-    color: var(--text-color); /* Override global a:hover */
-  }
-
-  .admin-btn {
-    border: 1px solid var(--accent-orange);
+  .admin-login {
     color: var(--accent-orange) !important;
-    padding: 0.4rem 0.8rem !important;
-    border-radius: 6px;
-    transition: all 0.2s ease;
+    border: 1px solid var(--accent-orange);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease !important;
   }
 
-  .admin-btn:hover {
-    background: var(--accent-orange);
-    color: var(--bg-color) !important;
-    box-shadow: 0 0 10px rgba(251, 146, 60, 0.4);
-    transform: translateY(-2px);
+  .admin-login:hover {
+    background: var(--glow-orange);
+    box-shadow: 0 0 10px var(--glow-orange);
+    color: var(--text-main) !important;
   }
 </style>

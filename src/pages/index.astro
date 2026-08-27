@@ -2,8 +2,8 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
-const title = '歡迎';
-const intro = '這是我們社團的官方網站。';
+const title = '交大喜劇俱樂部';
+const intro = '歡迎來到我們的官方網站。在這裡，我們用幽默點亮校園。';
 const announcementsHeading = '最新公告';
 
 const allAnnouncements = await getCollection('announcements');
@@ -15,25 +15,27 @@ const renderedAnnouncements = await Promise.all(allAnnouncements.map(async (ann)
 }));
 ---
 <Layout title={title}>
-  <h1>{title}</h1>
-  <p>{intro}</p>
+  <header class="hero">
+    <h1>{title}</h1>
+    <p class="subtitle">{intro}</p>
+  </header>
 
   <section class="announcements-section">
     <h2>{announcementsHeading}</h2>
     {renderedAnnouncements.length === 0 ? (
-      <p><em>(目前沒有新公告)</em></p>
+      <p class="empty-state">目前沒有新公告</p>
     ) : (
       <div class="announcements-grid">
         {renderedAnnouncements.map((ann, index) => (
-          <div class="announcement-card" style={`animation-delay: ${index * 0.1}s`}>
-            <h3>
-              {ann.data.title} 
-              <span class="announcement-date">{ann.data.date.toLocaleDateString()}</span>
-            </h3>
-            <div class="announcement-content">
+          <article class="announcement-card" style={`animation-delay: ${index * 0.1}s`}>
+            <div class="card-header">
+              <h3>{ann.data.title}</h3>
+              <span class="date">{ann.data.date.toLocaleDateString('zh-TW')}</span>
+            </div>
+            <div class="card-content prose">
               <ann.Content />
             </div>
-          </div>
+          </article>
         ))}
       </div>
     )}
@@ -41,61 +43,105 @@ const renderedAnnouncements = await Promise.all(allAnnouncements.map(async (ann)
 </Layout>
 
 <style>
-  .announcements-section {
-    margin-top: 3rem;
+  .hero {
+    margin-bottom: 4rem;
+    text-align: center;
   }
   
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--text-main);
+  }
+
+  .hero .subtitle {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+  }
+
+  .announcements-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid rgba(125, 211, 252, 0.2);
+    padding-bottom: 0.5rem;
+  }
+
+  .empty-state {
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
   .announcements-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    margin-top: 1.5rem;
+    display: grid;
+    gap: 2rem;
   }
 
   .announcement-card {
-    background: rgba(30, 41, 59, 0.5); /* Slate 800 */
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%), var(--surface-card);
+    border: 1px solid rgba(255,255,255,0.05);
     border-radius: 12px;
-    padding: 1.5rem;
-    backdrop-filter: blur(10px);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    padding: 2rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     opacity: 0;
-    animation: fadeUp 0.6s ease-out forwards;
+    animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   .announcement-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    border-color: rgba(56, 189, 248, 0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 15px rgba(125, 211, 252, 0.4);
+    border-color: rgba(125, 211, 252, 0.3);
   }
 
-  .announcement-card h3 {
-    margin-top: 0;
+  .card-header {
     display: flex;
-    align-items: center;
-    gap: 1rem;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
     border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 0.75rem;
+    padding-bottom: 1rem;
+  }
+
+  .card-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--accent-orange);
+  }
+
+  .card-header .date {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+  }
+
+  /* Style the markdown content */
+  .prose {
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .prose :global(p) {
     margin-bottom: 1rem;
   }
-
-  .announcement-date {
-    font-weight: normal;
-    font-size: 0.85rem;
-    color: var(--accent-orange);
-    margin-left: auto;
-  }
-
-  .announcement-content {
-    color: #CBD5E1;
-    line-height: 1.6;
-  }
-
-  /* Target images inside markdown content */
-  .announcement-content :global(img) {
+  
+  .prose :global(img) {
     max-width: 100%;
-    height: auto;
     border-radius: 8px;
     margin: 1rem 0;
+  }
+
+  .prose :global(a) {
+    color: var(--accent-blue);
+    text-decoration: underline;
+  }
+  
+  /* Hide Substack's native image expand buttons and link wrappers */
+  .prose :global(.image-link-expand),
+  .prose :global(.button-wrapper) {
+    display: none !important;
   }
 </style>
