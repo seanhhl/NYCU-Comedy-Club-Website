@@ -6,6 +6,32 @@
     <title>Content Manager</title>
   </head>
   <body>
+    <style>
+      .substack-btn {
+        position: fixed;
+        bottom: 24px;
+        right: 24px;
+        z-index: 10000;
+        background-color: #ff6719; /* Substack Orange */
+        color: white;
+        padding: 12px 20px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-family: sans-serif;
+        font-weight: bold;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        transition: transform 0.2s ease, background-color 0.2s ease;
+      }
+      .substack-btn:hover {
+        transform: scale(1.05);
+        background-color: #e55a12;
+      }
+    </style>
+    
+    <a href="https://seanhhl.substack.com/publish/post?type=newsletter" target="_blank" class="substack-btn">
+      發布 Substack 電子報 ✍️
+    </a>
+
     <!-- Include the script that builds the page and powers Decap CMS -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   </body>
