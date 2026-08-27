@@ -18,19 +18,84 @@ const renderedAnnouncements = await Promise.all(allAnnouncements.map(async (ann)
   <h1>{title}</h1>
   <p>{intro}</p>
 
-  <section style="margin-top: 2rem;">
+  <section class="announcements-section">
     <h2>{announcementsHeading}</h2>
     {renderedAnnouncements.length === 0 ? (
       <p><em>(目前沒有新公告)</em></p>
     ) : (
-      <ul>
-        {renderedAnnouncements.map(ann => (
-          <li style="margin-bottom: 1rem;">
-            <h3>{ann.data.title} <small style="font-weight: normal; font-size: 0.9em; color: #666;">- {ann.data.date.toLocaleDateString()}</small></h3>
-            <ann.Content />
-          </li>
+      <div class="announcements-grid">
+        {renderedAnnouncements.map((ann, index) => (
+          <div class="announcement-card" style={`animation-delay: ${index * 0.1}s`}>
+            <h3>
+              {ann.data.title} 
+              <span class="announcement-date">{ann.data.date.toLocaleDateString()}</span>
+            </h3>
+            <div class="announcement-content">
+              <ann.Content />
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     )}
   </section>
 </Layout>
+
+<style>
+  .announcements-section {
+    margin-top: 3rem;
+  }
+  
+  .announcements-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .announcement-card {
+    background: rgba(30, 41, 59, 0.5); /* Slate 800 */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out forwards;
+  }
+
+  .announcement-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    border-color: rgba(56, 189, 248, 0.2);
+  }
+
+  .announcement-card h3 {
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .announcement-date {
+    font-weight: normal;
+    font-size: 0.85rem;
+    color: var(--accent-orange);
+    margin-left: auto;
+  }
+
+  .announcement-content {
+    color: #CBD5E1;
+    line-height: 1.6;
+  }
+
+  /* Target images inside markdown content */
+  .announcement-content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 1rem 0;
+  }
+</style>

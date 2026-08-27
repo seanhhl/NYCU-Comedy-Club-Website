@@ -1,13 +1,102 @@
 ---
 const base = import.meta.env.BASE_URL;
 ---
-<nav style="display: flex; justify-content: space-between; padding: 1rem; background: #f4f4f4;">
-  <div>
-    <strong>社團網站</strong>
-    <a href={base} style="margin-left: 1rem;">首頁</a>
-    <a href={`${base}/activities`} style="margin-left: 1rem;">活動歷程</a>
-    <a href={`${base}/about`} style="margin-left: 1rem;">關於我們</a>
-    <a href={`${base}/join`} style="margin-left: 1rem;">加入我們</a>
-    <a href={`${base}/admin`} style="margin-left: 1rem; color: #ff6719; font-weight: bold;">幹部登入</a>
+<nav class="navbar">
+  <div class="nav-container">
+    <a href={base} class="nav-brand">陽明交大貢丸喜劇社</a>
+    
+    <div class="nav-links">
+      <a href={base}>首頁</a>
+      <a href={`${base}/activities`}>活動歷程</a>
+      <a href={`${base}/about`}>關於我們</a>
+      <a href={`${base}/join`}>加入我們</a>
+      <a href={`${base}/admin`} class="admin-btn">幹部登入</a>
+    </div>
   </div>
 </nav>
+
+<style>
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--navbar-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  }
+
+  .nav-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .nav-brand {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-color);
+    letter-spacing: 0.5px;
+    background: linear-gradient(to right, var(--accent-blue), var(--accent-orange));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: transform 0.2s ease;
+  }
+
+  .nav-brand:hover {
+    transform: scale(1.05);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  .nav-links a {
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 0.25rem 0;
+  }
+
+  /* Animated underline effect */
+  .nav-links a:not(.admin-btn)::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--accent-blue);
+    transition: width 0.3s ease;
+  }
+
+  .nav-links a:not(.admin-btn):hover::after {
+    width: 100%;
+  }
+  
+  .nav-links a:not(.admin-btn):hover {
+    color: var(--text-color); /* Override global a:hover */
+  }
+
+  .admin-btn {
+    border: 1px solid var(--accent-orange);
+    color: var(--accent-orange) !important;
+    padding: 0.4rem 0.8rem !important;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+
+  .admin-btn:hover {
+    background: var(--accent-orange);
+    color: var(--bg-color) !important;
+    box-shadow: 0 0 10px rgba(251, 146, 60, 0.4);
+    transform: translateY(-2px);
+  }
+</style>

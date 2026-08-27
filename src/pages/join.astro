@@ -17,17 +17,31 @@ const title = '加入我們';
     </div>
   </section>
 
-  <section style="margin-top: 3rem; padding: 1rem; border: 1px solid #ccc; border-radius: 8px;">
+  <section class="newsletter-card">
     <h2>電子報訂閱</h2>
     <p>如果你想收到我們的最新資訊 (Gmail)，歡迎訂閱我們：</p>
-    <div style="margin-top: 1rem;">
+    <div style="margin-top: 1rem; display: flex; justify-content: center;">
       <!-- Substack Embed Code -->
-      <iframe src="https://seanhhl.substack.com/embed?transparent=1&light=1" width="480" height="150" style="border: 0; background: transparent" frameborder="0" scrolling="no"></iframe>
+      <iframe src="https://seanhhl.substack.com/embed" width="100%" height="150" style="border: 0; background: transparent; max-width: 480px;" frameborder="0" scrolling="no"></iframe>
     </div>
   </section>
 </Layout>
 
 <style>
+  .newsletter-card {
+    margin-top: 4rem; 
+    padding: 2rem; 
+    background: rgba(30, 41, 59, 0.5); /* Slate 800 */
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+  .newsletter-card p {
+    color: #CBD5E1;
+  }
+  
   .button-group {
     display: flex;
     flex-direction: column;

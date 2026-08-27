@@ -8,30 +8,189 @@ const allTimeline = await getCollection('timeline');
 allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 ---
 <Layout title={title}>
-  <h1>{title}</h1>
-  <p>查看我們過去的活動和即將到來的活動。</p>
+  <div class="header-section">
+    <h1>{title}</h1>
+    <p>查看我們過去的活動與單口喜劇演出紀錄。</p>
+  </div>
   
-  <section style="margin-top: 2rem;">
-    <h2>活動時程</h2>
+  <section class="timeline-container">
     {allTimeline.length === 0 ? (
       <p><em>(目前沒有活動紀錄)</em></p>
     ) : (
-      <ul>
-        {allTimeline.map(event => (
-          <li style="margin-bottom: 2rem;">
-            <h3>{event.data.title} <small style="font-weight: normal; font-size: 0.9em; color: #666;">- {event.data.date.toLocaleDateString()}</small></h3>
-            <p>{event.data.description}</p>
-            {event.data.photos && event.data.photos.length > 0 && (
-              <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
-                {event.data.photos.map(photo => (
-                  <img src={photo.startsWith(import.meta.env.BASE_URL) ? photo : `${import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL}/${photo.startsWith('/') ? photo.slice(1) : photo}`} alt={event.data.title} style="max-width: 200px; max-height: 150px; object-fit: cover; border-radius: 4px;" />
-                ))}
-              </div>
-            )}
-          </li>
+      <div class="timeline">
+        {allTimeline.map((event, index) => (
+          <div class="timeline-item" style={`animation-delay: ${index * 0.15}s`}>
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+              <div class="timeline-date">{event.data.date.toLocaleDateString()}</div>
+              <h3 class="timeline-title">{event.data.title}</h3>
+              <p class="timeline-description">{event.data.description}</p>
+              
+              {event.data.photos && event.data.photos.length > 0 && (
+                <div class="timeline-photos">
+                  {event.data.photos.map(photo => (
+                    <img 
+                      src={photo.startsWith(import.meta.env.BASE_URL) ? photo : `${import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL.slice(0, -1) : import.meta.env.BASE_URL}/${photo.startsWith('/') ? photo.slice(1) : photo}`} 
+                      alt={event.data.title} 
+                      loading="lazy"
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     )}
   </section>
 </Layout>
 
+<style>
+  .header-section {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .header-section p {
+    color: #94A3B8; /* Slate 400 */
+    font-size: 1.1rem;
+  }
+
+  .timeline-container {
+    padding: 1rem 0;
+  }
+
+  .timeline {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding-left: 2rem;
+  }
+
+  /* The vertical line */
+  .timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 7px; /* Align with dot center */
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent-blue), var(--accent-orange));
+    opacity: 0.5;
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeRight 0.6s ease-out forwards;
+  }
+
+  /* The dot on the line */
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 0.25rem;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--bg-color);
+    border: 3px solid var(--accent-blue);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+    z-index: 2;
+    transition: all 0.3s ease;
+  }
+
+  .timeline-item:hover .timeline-dot {
+    background-color: var(--accent-blue);
+    transform: scale(1.2);
+    box-shadow: 0 0 15px var(--accent-blue);
+  }
+
+  .timeline-content {
+    background: rgba(30, 41, 59, 0.5); /* Slate 800 translucent */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    backdrop-filter: blur(10px);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .timeline-item:hover .timeline-content {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    border-color: rgba(56, 189, 248, 0.4);
+  }
+
+  .timeline-date {
+    color: var(--accent-orange);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .timeline-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.4rem;
+    color: var(--text-color);
+  }
+
+  .timeline-description {
+    color: #CBD5E1; /* Slate 300 */
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .timeline-photos {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1.25rem;
+  }
+
+  .timeline-photos img {
+    max-width: 200px;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .timeline-photos img:hover {
+    transform: scale(1.05) rotate(1deg);
+  }
+
+  @keyframes fadeRight {
+    from {
+      opacity: 0;
+      transform: translateX(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  /* Responsive tweaks */
+  @media (max-width: 600px) {
+    .timeline {
+      padding-left: 1.5rem;
+    }
+    .timeline::before {
+      left: 3px;
+    }
+    .timeline-dot {
+      left: -1.5rem;
+      width: 12px;
+      height: 12px;
+      border-width: 2px;
+    }
+    .timeline-photos img {
+      max-width: 100%;
+      height: auto;
+    }
+  }
+</style>
