@@ -26,6 +26,15 @@ collections:
       - {label: "Date", name: "date", widget: "datetime"}
       - {label: "Description", name: "description", widget: "markdown"}
       - {label: "Photos", name: "photos", widget: "list", field: {label: "Photo", name: "photo", widget: "image"}, required: false}
+      - label: "特邀講師 (Guest Speaker)"
+        name: "speaker"
+        widget: "object"
+        required: false
+        fields:
+          - {label: "Name", name: "name", widget: "string"}
+          - {label: "Role/Title", name: "role", widget: "string", required: false}
+          - {label: "Photo", name: "photo", widget: "image", required: false}
+          - {label: "Bio", name: "bio", widget: "text", required: false}
 
   - name: "faq"
     label: "FAQ Entries"

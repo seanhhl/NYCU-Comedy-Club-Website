@@ -29,7 +29,6 @@ allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
               {event.data.photos && event.data.photos.length > 0 && (
                 <div class="photo-gallery">
                   {event.data.photos.map(photo => {
-                    // Ensure proper path resolution for images
                     let imgSrc = photo;
                     if (!photo.startsWith('http') && !photo.startsWith('data:')) {
                        const base = import.meta.env.BASE_URL;
@@ -39,6 +38,21 @@ allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
                     }
                     return <img src={imgSrc} alt={event.data.title} loading="lazy" />
                   })}
+                </div>
+              )}
+              
+              {event.data.speaker && (
+                <div class="speaker-card">
+                  {event.data.speaker.photo && (
+                    <div class="avatar-ring">
+                      <img class="avatar" src={event.data.speaker.photo} alt={event.data.speaker.name} loading="lazy" />
+                    </div>
+                  )}
+                  <div class="speaker-info">
+                    <h4>{event.data.speaker.name}</h4>
+                    {event.data.speaker.role && <p class="role">{event.data.speaker.role}</p>}
+                    {event.data.speaker.bio && <p class="bio">{event.data.speaker.bio}</p>}
+                  </div>
                 </div>
               )}
             </div>
@@ -193,6 +207,54 @@ allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
   .photo-gallery img:hover {
     transform: scale(1.05);
+  }
+
+  /* Speaker Card */
+  .speaker-card {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .speaker-card .avatar-ring {
+    display: inline-block;
+    background: var(--accent-blue);
+    border-radius: 70% 50%;
+    padding: 1px;
+    box-shadow: 0 0 10px rgba(125, 212, 252, 0.3);
+    flex-shrink: 0;
+  }
+
+  .speaker-card .avatar {
+    display: block;
+    width: 60px;
+    height: 60px;
+    border-radius: 50% 70%;
+    object-fit: cover;
+    border: 0px solid var(--bg-main);
+  }
+
+  .speaker-info h4 {
+    margin: 0;
+    color: var(--text-main);
+    font-size: 1.1rem;
+  }
+
+  .speaker-info .role {
+    color: var(--accent-orange);
+    font-weight: 500;
+    font-size: 0.85rem;
+    margin: 0.2rem 0 0.5rem 0;
+  }
+
+  .speaker-info .bio {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0;
   }
 
   @media (max-width: 768px) {

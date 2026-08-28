@@ -16,6 +16,12 @@ const timeline = defineCollection({
     date: z.date(),
     description: z.string().nullish(),
     photos: z.array(z.string()).nullish(),
+    speaker: z.object({
+      name: z.string(),
+      role: z.string().nullish(),
+      photo: z.string().nullish(),
+      bio: z.string().nullish(),
+    }).nullish(),
   }),
 });
 
