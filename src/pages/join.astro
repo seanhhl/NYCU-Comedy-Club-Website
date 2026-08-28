@@ -54,17 +54,42 @@ const title = '加入我們';
   }
 
   .card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%), var(--surface-card);
-    border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    z-index: 0;
+    background: transparent;
     border-radius: 12px;
     padding: 2rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
+  
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--surface-card);
+    z-index: -1;
+  }
+  
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(45deg, var(--accent-blue), var(--accent-orange));
+    z-index: -2;
+    filter: blur(15px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
   .card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 15px rgba(125, 211, 252, 0.4);
-    border-color: rgba(125, 211, 252, 0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  
+  .card:hover::after {
+    opacity: 0.5;
   }
 
   .card h2 {

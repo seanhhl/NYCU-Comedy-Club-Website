@@ -106,19 +106,44 @@ const renderedTeam = await Promise.all(allTeam.map(async (member) => {
   }
 
   .faq-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%), var(--surface-card);
-    border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    z-index: 0;
+    background: transparent;
     border-radius: 12px;
     padding: 1.5rem 2rem;
     opacity: 0;
     animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
+  
+  .faq-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--surface-card);
+    z-index: -1;
+  }
+  
+  .faq-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(45deg, var(--accent-blue), var(--accent-orange));
+    z-index: -2;
+    filter: blur(15px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
   .faq-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 15px rgba(125, 211, 252, 0.4);
-    border-color: rgba(125, 211, 252, 0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  
+  .faq-card:hover::after {
+    opacity: 0.5;
   }
 
   .question {
@@ -141,8 +166,9 @@ const renderedTeam = await Promise.all(allTeam.map(async (member) => {
   }
 
   .team-card {
-    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%), var(--surface-card);
-    border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    z-index: 0;
+    background: transparent;
     border-radius: 12px;
     padding: 2rem;
     text-align: center;
@@ -150,11 +176,35 @@ const renderedTeam = await Promise.all(allTeam.map(async (member) => {
     opacity: 0;
     animation: slideUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
   }
+  
+  .team-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--surface-card);
+    z-index: -1;
+  }
+  
+  .team-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(45deg, var(--accent-blue), var(--accent-orange));
+    z-index: -2;
+    filter: blur(15px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
   .team-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 15px rgba(125, 211, 252, 0.4);
-    border-color: rgba(125, 211, 252, 0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+  
+  .team-card:hover::after {
+    opacity: 0.5;
   }
 
   .avatar-ring {
@@ -196,6 +246,6 @@ const renderedTeam = await Promise.all(allTeam.map(async (member) => {
 
   @keyframes slideUp {
     from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    to { opacity: 1; transform: none; }
   }
 </style>

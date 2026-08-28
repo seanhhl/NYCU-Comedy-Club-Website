@@ -1,5 +1,6 @@
 ---
-const base = import.meta.env.BASE_URL;
+const rawBase = import.meta.env.BASE_URL;
+const base = rawBase === '/' ? '' : rawBase;
 ---
 <nav class="navbar">
   <div class="nav-content">
@@ -28,7 +29,7 @@ const base = import.meta.env.BASE_URL;
   </button>
   
   <div class="sidebar-content">
-    <a href={base}>首頁</a>
+    <a href={base || '/'}>首頁</a>
     <a href={`${base}/activities`}>活動歷程</a>
     <a href={`${base}/about`}>關於我們</a>
     <a href={`${base}/join`}>加入我們</a>
@@ -86,9 +87,9 @@ const base = import.meta.env.BASE_URL;
   }
 
   .brand strong {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     color: var(--text-main);
-    letter-spacing: 1px;
+    font-weight: 1000;
   }
 
   .menu-toggle {
@@ -134,7 +135,9 @@ const base = import.meta.env.BASE_URL;
     width: 300px;
     max-width: 85vw;
     height: 100vh;
-    background: var(--surface-card);
+    background: rgba(11, 13, 16, 0.7); /* Lighter frosted slate */
+    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(20px);
     border-left: 1px solid rgba(255,255,255,0.05);
     box-shadow: -10px 0 30px rgba(0,0,0,0.5);
     z-index: 999;

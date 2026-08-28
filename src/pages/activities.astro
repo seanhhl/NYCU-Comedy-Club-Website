@@ -97,7 +97,7 @@ allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
   @keyframes slideInRight {
     from { opacity: 0; transform: translateX(20px); }
-    to { opacity: 1; transform: translateX(0); }
+    to { opacity: 1; transform: none; }
   }
 
   /* The glowing dot */
@@ -116,17 +116,42 @@ allTimeline.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 
   /* Surface Card */
   .timeline-content {
-    background: linear-gradient(145deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 60%), var(--surface-card);
-    border: 1px solid rgba(255,255,255,0.05);
+    position: relative;
+    z-index: 0;
+    background: transparent;
     border-radius: 12px;
     padding: 1.5rem 2rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   }
+  
+  .timeline-content::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--surface-card);
+    z-index: -1;
+  }
+  
+  .timeline-content::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(45deg, var(--accent-blue), var(--accent-orange));
+    z-index: -2;
+    filter: blur(15px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
 
   .timeline-content:hover {
     transform: translateY(-4px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(125, 211, 252, 0.4);
-    border-color: rgba(125, 211, 252, 0.3);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  }
+  
+  .timeline-content:hover::after {
+    opacity: 0.5;
   }
 
   .timeline-date {
