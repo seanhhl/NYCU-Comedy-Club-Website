@@ -16,7 +16,31 @@ const renderedAnnouncements = await Promise.all(allAnnouncements.map(async (ann)
 ---
 <Layout title={title}>
   <header class="hero">
-    <h1>{title}</h1>
+    <div class="hero-brand">
+      <h1>交大貢丸<br />喜劇社</h1>
+      <div class="hero-logo-container">
+        <img src="/images/logo.png" alt="NYCU Comedy Club Logo" class="hero-logo" />
+        
+        <!-- Playful Fake Reviews (Jokes) -->
+        <div class="reviews-stack">
+          <div class="joke-review card-1">
+            <div class="stars">★☆☆☆☆</div>
+            <p>"我給六顆星，這是多出來的那顆"</p>
+            <span class="author">— 算術大師</span>
+          </div>
+          <div class="joke-review card-2">
+            <div class="stars">★★★★★</div>
+            <p>"他們很好笑，真的"</p>
+            <span class="author">— 媽媽</span>
+          </div>
+          <div class="joke-review card-3">
+            <div class="stars">★★★★★</div>
+            <p>"剛才有人說給五星可以領貢丸"</p>
+            <span class="author">— 路人</span>
+          </div>
+        </div>
+      </div>
+    </div>
     <p class="subtitle">{intro}</p>
   </header>
 
@@ -44,18 +68,133 @@ const renderedAnnouncements = await Promise.all(allAnnouncements.map(async (ann)
 
 <style>
   .hero {
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-bottom: 4rem;
     text-align: center;
+    padding-top: 2rem;
   }
   
+  .hero-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
   .hero h1 {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+    font-size: 6rem;
+    line-height: 1.1;
+    margin: 0;
     color: var(--text-main);
+    text-shadow: 0 4px 30px rgba(255, 255, 255, 0.15);
+    text-align: left;
+  }
+  
+  .hero-logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  
+  .hero-logo {
+    height: 320px; /* Even larger logo */
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 40px rgba(125, 211, 252, 0.6));
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  .reviews-stack {
+    position: relative;
+    width: 380px;
+    height: 160px;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .joke-review {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -140px; /* half of 280px max-width */
+    width: 100%;
+    background: var(--surface-card);
+    border-radius: 16px;
+    padding: 1rem 1.5rem;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+    border: 1px solid rgba(255,255,255,0.05);
+    max-width: 280px;
+    text-align: center;
+    transition: transform 0.3s ease, z-index 0s, box-shadow 0.3s ease;
+    /* initial state via css variables */
+    transform: translate(var(--tx), var(--ty)) rotate(var(--r));
+  }
+  
+  .joke-review:hover {
+    z-index: 10 !important;
+    animation-play-state: paused;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+    transform: translate(var(--tx), calc(var(--ty) - 5px)) rotate(var(--r)) scale(1.05) !important;
+  }
+  
+  .card-1 {
+    --tx: -50px; --ty: 25px; --r: 12deg;
+    z-index: 1;
+    animation: float-card 7s ease-in-out infinite;
+  }
+  .card-2 {
+    --tx: 0px; --ty: 0px; --r: 2deg;
+    z-index: 2;
+    animation: float-card 6s ease-in-out infinite 1s;
+  }
+  .card-3 {
+    --tx: 50px; --ty: -25px; --r: -14deg;
+    z-index: 3;
+    animation: float-card 8s ease-in-out infinite 0.5s;
+  }
+  
+  @keyframes float-card {
+    0%, 100% { transform: translate(var(--tx), var(--ty)) rotate(var(--r)); }
+    50% { transform: translate(var(--tx), calc(var(--ty) - 10px)) rotate(var(--r)); }
+  }
+  
+  .joke-review .stars {
+    color: #fbbf24;
+    letter-spacing: 2px;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .joke-review p {
+    font-size: 1.1rem;
+    margin: 0 0 0.5rem 0;
+    font-style: italic;
+    color: var(--text-main);
+  }
+  
+  .joke-review .author {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: bold;
+  }
+  
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
   }
 
   .hero .subtitle {
-    font-size: 1.2rem;
+    font-size: 1.75rem;
     color: var(--text-muted);
   }
 
@@ -171,5 +310,41 @@ const renderedAnnouncements = await Promise.all(allAnnouncements.map(async (ann)
   .prose :global(.image-link-expand),
   .prose :global(.button-wrapper) {
     display: none !important;
+  }
+  
+  /* Responsive Hero */
+  @media (max-width: 768px) {
+    .hero-brand {
+      gap: 2rem;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      text-align: center;
+    }
+    
+    .hero-logo {
+      height: auto;
+      width: 100%;
+      max-width: 250px;
+    }
+    
+    .reviews-stack {
+      transform: scale(0.85); /* shrink the entire stack slightly to prevent horizontal overflow */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+    
+    .hero-logo {
+      max-width: 200px;
+    }
+    
+    .reviews-stack {
+      transform: scale(0.7);
+    }
   }
 </style>
