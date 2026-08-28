@@ -6,25 +6,73 @@ const base = import.meta.env.BASE_URL;
     <div class="brand">
       <strong>NYCU Comedy</strong>
     </div>
-    <div class="nav-links">
-      <a href={base}>首頁</a>
-      <a href={`${base}/activities`}>活動歷程</a>
-      <a href={`${base}/about`}>關於我們</a>
-      <a href={`${base}/join`}>加入我們</a>
-      <a href={`${base}/admin`} class="admin-login">幹部登入</a>
-    </div>
+
+    <button class="menu-toggle" id="menu-toggle" aria-label="Toggle Menu">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
   </div>
 </nav>
 
-<style>
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <button class="close-menu" id="close-menu" aria-label="Close Menu">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+  
+  <div class="sidebar-content">
+    <a href={base}>首頁</a>
+    <a href={`${base}/activities`}>活動歷程</a>
+    <a href={`${base}/about`}>關於我們</a>
+    <a href={`${base}/join`}>加入我們</a>
+    <a href={`${base}/admin`} class="admin-login">幹部登入</a>
+  </div>
+</aside>
+
+<script is:inline>
+  (function() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const closeMenu = document.getElementById('close-menu');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    if (!menuToggle || !sidebar || !overlay) return;
+
+    function openSidebar() {
+      sidebar.classList.add('open');
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden'; // Prevent scrolling when open
+    }
+
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    menuToggle.addEventListener('click', openSidebar);
+    closeMenu.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+  })();
+</script>
+
+<style is:global>
   .navbar {
     position: sticky;
     top: 0;
     width: 100%;
-    background: rgba(9, 9, 11, 0.4); /* Make it more transparent so blur is obvious */
-    backdrop-filter: blur(20px);
+    background: rgba(9, 9, 11, 0.4);
     -webkit-backdrop-filter: blur(20px);
-    border-bottom: 1px solid rgba(125, 211, 252, 0.1); /* Subtle blue border */
+    backdrop-filter: blur(20px);
+    transform: translateZ(0); /* Force hardware acceleration for Safari/Chrome */
+    border-bottom: 1px solid rgba(125, 211, 252, 0.1);
     z-index: 100;
   }
 
@@ -43,34 +91,114 @@ const base = import.meta.env.BASE_URL;
     letter-spacing: 1px;
   }
 
-  .nav-links {
+  .menu-toggle {
+    background: none;
+    border: none;
+    color: var(--text-main);
+    cursor: pointer;
+    padding: 0.5rem;
     display: flex;
-    gap: 1.5rem;
     align-items: center;
-  }
-
-  .nav-links a {
-    color: var(--text-muted);
-    font-weight: 500;
-    text-decoration: none;
+    justify-content: center;
     transition: color 0.2s ease;
   }
 
-  .nav-links a:hover {
-    color: var(--text-main);
+  .menu-toggle:hover {
+    color: var(--accent-blue);
   }
 
-  .admin-login {
+  /* Sidebar Styles */
+  #sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 998;
+  }
+
+  #sidebar-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 300px;
+    max-width: 85vw;
+    height: 100vh;
+    background: var(--surface-card);
+    border-left: 1px solid rgba(255,255,255,0.05);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    z-index: 999;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+  }
+
+  #sidebar.open {
+    transform: translateX(0);
+  }
+
+  .close-menu {
+    align-self: flex-end;
+    margin: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.2s ease, transform 0.2s ease;
+  }
+  
+  .close-menu:hover {
+    color: var(--text-main);
+    transform: scale(1.1);
+  }
+
+  .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem 3rem 3rem 3rem;
+  }
+
+  .sidebar-content a {
+    color: var(--text-main);
+    font-size: 1.25rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+  }
+
+  .sidebar-content a:hover {
+    color: var(--accent-blue);
+    transform: translateX(5px);
+  }
+
+  .sidebar-content .admin-login {
+    margin-top: 2rem;
     color: var(--accent-orange) !important;
     border: 1px solid var(--accent-orange);
-    padding: 0.4rem 1rem;
+    padding: 0.6rem 1.2rem;
     border-radius: 20px;
+    text-align: center;
     transition: all 0.3s ease !important;
   }
 
-  .admin-login:hover {
+  .sidebar-content .admin-login:hover {
     background: var(--glow-orange);
     box-shadow: 0 0 10px var(--glow-orange);
     color: var(--text-main) !important;
+    transform: none;
   }
 </style>

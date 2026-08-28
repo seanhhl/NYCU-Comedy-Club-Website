@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { getCollection, render } from 'astro:content';
 
-const title = '交大喜劇俱樂部';
+const title = '交大貢丸喜劇社';
 const intro = '歡迎來到我們的官方網站。在這裡，我們用幽默點亮校園。';
 const announcementsHeading = '最新公告';
 
@@ -130,6 +130,8 @@ const renderedAnnouncements = await Promise.all(allAnnouncements.map(async (ann)
   
   .prose :global(img) {
     max-width: 100%;
+    height: auto;
+    object-fit: contain;
     border-radius: 8px;
     margin: 1rem 0;
   }
